@@ -20,10 +20,11 @@ io.on("connection", (client) => {
   });
 
   client.on("sendMessage", (data) => {
+    let person = users.getPerson(client.id);
+
     let message = createMesagges(data.name, data.message);
     client.broadcast.emit("createdmessage", message);
-  })
-
+  });
 
   client.on("disconnect", () => {
     let userDelete = users.deletePerson(client.id);
@@ -36,5 +37,11 @@ io.on("connection", (client) => {
       )
     );
     client.broadcast.emit("PersonList", users.getPersons());
+  });
+
+
+  client.on("privateMessage", (data) => {
+    let person = users.getPerson(client.id);
+    client.broadcast.to(data.to).emit("privateMessage", createMesagges(person.name, data.message));
   });
 });

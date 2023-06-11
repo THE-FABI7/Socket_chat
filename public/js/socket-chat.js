@@ -17,8 +17,8 @@ var user = {
 
 socket.on("connect", function () {
   console.log("Conectado al servidor");
-  socket.emit("insidetheroom", user, function (resp){
-       console.log("users connected:", resp);
+  socket.emit("insidetheroom", user, function (resp) {
+    console.log("users connected:", resp);
   });
 });
 
@@ -40,11 +40,20 @@ socket.emit(
 );
 
 // Escuchar información
+/* Este código escucha el evento "createMessage" emitido por el servidor usando Socket.io. Cuando se
+recibe el evento, ejecuta la función de devolución de llamada y registra el mensaje recibido del
+servidor en la consola. */
 socket.on("createMesagge", function (mensaje) {
   console.log("Servidor:", mensaje);
 });
 
+/* Este código escucha el evento 'PersonList' emitido por el servidor usando Socket.io. Cuando se
+recibe el evento, se ejecuta la función de devolución de llamada y la lista de personas (o usuarios)
+conectados al servidor se registra en la consola. */
+socket.on("PersonList", function (persons) {
+  console.log(persons);
+});
 
-socket.on('PersonList',function(persons){
-        console.log(persons)
+socket.on("privateMessage", function (message) {
+  console.loh("Message private:", message);
 });
