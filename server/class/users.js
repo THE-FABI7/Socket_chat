@@ -8,8 +8,8 @@ class Users {
       this.persons = [];
     }
   
-    addPerson(id, name) {
-      let person = { id, name };
+    addPerson(id, name, hall) {
+      let person = { id, name, hall};
       this.persons.push(person);
       return this.persons;
     }

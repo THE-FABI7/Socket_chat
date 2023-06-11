@@ -6,13 +6,15 @@ const users = new Users();
 
 io.on("connection", (client) => {
   client.on("insidetheroom", (data, callback) => {
-    if (!data.name) {
+    if (!data.name || !data.hall) {
       return callback({
         error: true,
         message: "name is required",
       });
     }
-    let persons = users.addPerson(client.id, data.name);
+
+    client.join(data.hall);
+    let persons = users.addPerson(client.id, data.name, data.hall);
 
     client.broadcast.emit("PersonList", users.getPersons());
 
@@ -39,9 +41,10 @@ io.on("connection", (client) => {
     client.broadcast.emit("PersonList", users.getPersons());
   });
 
-
   client.on("privateMessage", (data) => {
     let person = users.getPerson(client.id);
-    client.broadcast.to(data.to).emit("privateMessage", createMesagges(person.name, data.message));
+    client.broadcast
+      .to(data.to)
+      .emit("privateMessage", createMesagges(person.name, data.message));
   });
 });

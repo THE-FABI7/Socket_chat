@@ -6,13 +6,14 @@ var params = new URLSearchParams(window.location.search);
 "nombre". Si no existe, redirige al usuario a la página "index.html" y arroja un error con el
 mensaje "se requiere el nombre". Es probable que esto se use para garantizar que el usuario
 proporcione un parámetro de nombre en la URL antes de acceder a la página. */
-if (!params.has("name")) {
+if (!params.has("name") || !params.has("hall")) {
   window.location = "index.html";
-  throw new Error("name is required");
+  throw new Error("name or hall are required");
 }
 
 var user = {
   name: params.get("name"),
+  hall: params.get("hall"),
 };
 
 socket.on("connect", function () {
