@@ -40,6 +40,11 @@ socket.emit(
 );
 
 // Escuchar información
-socket.on("enviarMensaje", function (mensaje) {
+socket.on("createMesagge", function (mensaje) {
   console.log("Servidor:", mensaje);
+});
+
+
+socket.on('PersonList',function(persons){
+        console.log(persons)
 });
