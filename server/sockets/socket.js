@@ -14,23 +14,23 @@ io.on("connection", (client) => {
     }
 
     client.join(data.hall);
-    let persons = users.addPerson(client.id, data.name, data.hall);
+    users.addPerson(client.id, data.name, data.hall);
 
-    client.broadcast.emit("PersonList", users.getPersons());
+    client.broadcast.to(data.hall).emit("PersonList", users.getPersonByroom(data.hall));
 
-    callback(persons);
+    callback(users.getPersonByroom(data.hall));
   });
 
   client.on("sendMessage", (data) => {
     let person = users.getPerson(client.id);
 
     let message = createMesagges(data.name, data.message);
-    client.broadcast.emit("createdmessage", message);
+    client.broadcast.to(person.hall).emit("createdmessage", message);
   });
 
   client.on("disconnect", () => {
     let userDelete = users.deletePerson(client.id);
-    client.broadcast.emit(
+    client.broadcast.to(userDelete.hall).emit(
       "createMesagge",
       createMesagges(
         "administrador",
@@ -38,7 +38,7 @@ io.on("connection", (client) => {
     left the chat`
       )
     );
-    client.broadcast.emit("PersonList", users.getPersons());
+    client.broadcast.to(userDelete.hall).emit("PersonList", users.getPersonByroom(userDelete.hall));
   });
 
   client.on("privateMessage", (data) => {
